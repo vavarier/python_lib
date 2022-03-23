@@ -23,7 +23,7 @@ echo "=> Creating repository..."
 tput sgr0
 
 git clone git@github.com:vavarier/python_lib.git moulitek_lib
-sudo mv moulitek_lib/moulitek /usr/lib/python3.10
+sudo mv moulitek_lib/lib/moulitek /usr/lib/python3.10
 rm -rf moulitek_lib
 
 tput setaf 2
