@@ -1,37 +1,43 @@
 from mt_print import *
 
+moulitek_script_trace = ""
+
 def success(name):
-    print("[OK] " + name + " [/OK]")
-    print("_____________________________________\n")
+    global moulitek_script_trace
+    moulitek_script_trace += "[OK] " + name + " [/OK]"
+    moulitek_script_trace += "_____________________________________\n"
 
 def category(name, description):
-    print("[##] " + name + " [/##]\n")
+    global moulitek_script_trace
+    moulitek_script_trace += "[##] " + name + " [/##]\n"
     if (description != None):
-        print("[desc]\n" + description + "\n[/desc]")
-    print("_____________________________________\n")
+        moulitek_script_trace += "[desc]\n" + description + "\n[/desc]"
+    moulitek_script_trace += "_____________________________________\n"
 
 def sequence(name, description):
-    print("[#] " + name + " [/#]\n")
+    global moulitek_script_trace
+    moulitek_script_trace += "[#] " + name + " [/#]\n"
     if (description != None):
-        print("[desc]\n" + description + "\n[/desc]")
-    print("_____________________________________\n")
+        moulitek_script_trace += "[desc]\n" + description + "\n[/desc]"
+    moulitek_script_trace += "_____________________________________\n"
 
 def error(name, flag, description, expected, got):
+    global moulitek_script_trace
     if (flag == SEGFAULT):
-        print("[KO] [segfault] " + name + " [/KO]\n")
+        moulitek_script_trace += "[KO] [segfault] " + name + " [/KO]\n"
     if (flag == TIMEOUT):
-        print("[KO] [timeout] " + name + " [/KO]\n")
+        moulitek_script_trace += "[KO] [timeout] " + name + " [/KO]\n"
     if (flag == NEVER_RUN):
         return ;
     if (flag == RETVALUE):
-        print("[KO] [retvalue] " + name + " [/KO]\n")
+        moulitek_script_trace += "[KO] [retvalue] " + name + " [/KO]\n"
     if (flag == BADOUTPUT):
-        print("[KO] [badoutput] " + name + " [/KO]\n")
+        moulitek_script_trace += "[KO] [badoutput] " + name + " [/KO]\n"
     if (description != None):
-        print("[desc]\n" + description + "\n[/desc]\n")
-    print("[expected]\n" + expected + "\n[/expected]\n")
-    print("[got]\n" + got + "\n[/got]\n")
-    print("_____________________________________\n")
+        moulitek_script_trace += "[desc]\n" + description + "\n[/desc]\n"
+    moulitek_script_trace += "[expected]\n" + expected + "\n[/expected]\n"
+    moulitek_script_trace += "[got]\n" + got + "\n[/got]\n"
+    moulitek_script_trace += "_____________________________________\n"
 
 
 def gen_trace():
