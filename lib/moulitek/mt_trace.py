@@ -4,6 +4,7 @@ import glob
 
 moulitek_script_trace = ""
 
+
 def init_moulitek():
     """Initialize moulitek for testing
     """
@@ -17,12 +18,13 @@ def init_moulitek():
         moulitek_script_trace += "[BUILD SUCCESS]\n"
     else:
         exit(0)
-    subprocess.call(
-        "timeout 15s make tests_run 1> /dev/null 2> /dev/null", shell=True)
-    proc = subprocess.Popen("timeout 15s gcovr --exclude=tests", shell=True,
-                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
-    proc.wait()
-    if proc.returncode == 0:
+    ret = subprocess.call(
+        "timeout 15s make -q tests_run 1> /dev/null 2> /dev/null", shell=True)
+    if ret != 2:
+        subprocess.call(
+            "timeout 15s make tests_run 1> /dev/null 2> /dev/null", shell=True)
+        proc = subprocess.Popen("timeout 15s gcovr --exclude=tests", shell=True,
+                                stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         coverage, _ = proc.communicate()
         moulitek_script_trace += "[covr]\n%s[/covr]\n" % coverage.decode()
         proc = subprocess.Popen("timeout 15s gcovr --exclude=tests -b",
@@ -30,10 +32,12 @@ def init_moulitek():
         branches, _ = proc.communicate()
         moulitek_script_trace += "[branch]\n%s[/branch]\n" % branches.decode()
 
+
 def success(name):
     global moulitek_script_trace
     moulitek_script_trace += "[OK] " + name + " [/OK]\n"
     moulitek_script_trace += "_____________________________________\n\n"
+
 
 def category(name, description):
     global moulitek_script_trace
@@ -42,12 +46,14 @@ def category(name, description):
         moulitek_script_trace += "[desc]\n" + description + "\n[/desc]\n"
     moulitek_script_trace += "_____________________________________\n\n"
 
+
 def sequence(name, description):
     global moulitek_script_trace
     moulitek_script_trace += "[#] " + name + " [/#]\n\n"
     if (description != None):
         moulitek_script_trace += "[desc]\n" + description + "\n[/desc]\n"
     moulitek_script_trace += "_____________________________________\n\n"
+
 
 def error(name, flag, description, expected, got):
     global moulitek_script_trace
@@ -56,7 +62,7 @@ def error(name, flag, description, expected, got):
     if (flag == TIMEOUT):
         moulitek_script_trace += "[KO] [timeout] " + name + " [/KO]\n\n"
     if (flag == NEVER_RUN):
-        return ;
+        return
     if (flag == RETVALUE):
         moulitek_script_trace += "[KO] [retvalue] " + name + " [/KO]\n\n"
     if (flag == BADOUTPUT):
@@ -77,5 +83,6 @@ def gen_trace():
                 if test["passed"]:
                     success(test["name"])
                 else:
-                    error(test["name"], test["reason"], test["desc"], test["expected"], test["got"])
+                    error(test["name"], test["reason"],
+                          test["desc"], test["expected"], test["got"])
     open("trace.txt", "w+").write(moulitek_script_trace)
