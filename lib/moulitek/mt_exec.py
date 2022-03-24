@@ -1,5 +1,13 @@
 import subprocess
 
+def compiling():
+    """check compiling
+    """
+    ret = subprocess.call("make re")
+    subprocess.call("make fclean")
+    if (ret != 0):
+        moulitek_script_trace("[BUILD ERROR]")
+
 def call_system(command : str, timeout : int = 60) -> int:
     """Call an external command
 
