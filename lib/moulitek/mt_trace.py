@@ -1,8 +1,4 @@
-SEGFAULT = 1
-TIMEOUT = 2
-RETVALUE = 3
-BADOUTPUT = 4
-NEVER_RUN = 5
+from mt_print import *
 
 def success(name):
     print("[OK] " + name + " [/OK]")
@@ -36,3 +32,15 @@ def error(name, flag, description, expected, got):
     print("[expected]\n" + expected + "\n[/expected]\n")
     print("[got]\n" + got + "\n[/got]\n")
     print("_____________________________________\n")
+
+
+def gen_trace():
+    for cat in moulitek_all_categories:
+        category(cat.name, cat.desc)
+        for seq in cat.sequences:
+            sequence(seq.name, seq.desc)
+            for test in seq.tests:
+                if test["passed"]:
+                    success(test["name"])
+                else:
+                    error(test["name"], test["reason"], test["desc"], test["expected"], test["got"])
