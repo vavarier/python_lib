@@ -13,12 +13,6 @@ def init_moulitek():
         moulitek_script_trace += "[BUILD SUCCESS]\n"
         return
     ret = subprocess.call(
-        "timeout 15s make re 1> /dev/null 2> /dev/null", shell=True)
-    if (ret == 0):
-        moulitek_script_trace += "[BUILD SUCCESS]\n"
-    else:
-        exit(0)
-    ret = subprocess.call(
         "timeout 15s make -q tests_run 1> /dev/null 2> /dev/null", shell=True)
     if ret != 2:
         subprocess.call(
@@ -31,6 +25,12 @@ def init_moulitek():
                                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         branches, _ = proc.communicate()
         moulitek_script_trace += "[branch]\n%s[/branch]\n" % branches.decode()
+    ret = subprocess.call(
+        "timeout 15s make re 1> /dev/null 2> /dev/null", shell=True)
+    if (ret == 0):
+        moulitek_script_trace += "[BUILD SUCCESS]\n"
+    else:
+        exit(0)
 
 
 def success(name):
