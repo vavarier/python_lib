@@ -51,3 +51,4 @@ def gen_trace():
                     success(test["name"])
                 else:
                     error(test["name"], test["reason"], test["desc"], test["expected"], test["got"])
+    open("trace.txt", "w+").write(moulitek_script_trace)
