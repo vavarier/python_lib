@@ -7,7 +7,7 @@ NEVER_RUN = 5
 moulitek_all_categories = []
 
 class Category:
-    def __init__(self, name, desc=None):
+    def __init__(self, name, desc=None, info = False):
         """Init a category
 
         `name` The name of the category
@@ -16,6 +16,7 @@ class Category:
         """
         self.name = name
         self.desc = desc
+        self.info = info
         self.sequences = []
         moulitek_all_categories.append(self)
 

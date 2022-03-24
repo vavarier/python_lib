@@ -4,6 +4,17 @@ import glob
 
 moulitek_script_trace = ""
 
+def check_makefile():
+    makefile_test = Category("Preriquires Tests", "Looking for mandatory preriquires of the project.", info=True)
+    make_rules = makefile_test.add_sequence("Make rules", "Check all makefile's mandatory rules.")
+    mandatory = ["all", "re", "clean", "fclean"]
+    for phony in mandatory:
+        make_rules.add_test("Make %s." % phony)
+        ret = subprocess.call("timeout 15s make -q %s 1> /dev/null 2> /dev/null" % phony, shell=True)
+        if ret == 2:
+            make_rules.set_status("Make %s." % phony, False, BADOUTPUT, "Rule make %s" % phony, "No rule in Makefile")
+        else:
+            make_rules.set_status("Make %s." % phony, True)
 
 def init_moulitek():
     """Initialize moulitek for testing
@@ -25,13 +36,13 @@ def init_moulitek():
                                 shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
         branches, _ = proc.communicate()
         moulitek_script_trace += "[branch]\n%s[/branch]\n" % branches.decode()
+    check_makefile()
     ret = subprocess.call(
-        "timeout 15s make re 1> /dev/null 2> /dev/null", shell=True)
+        "timeout 15s make fclean && make 1> /dev/null 2> /dev/null", shell=True)
     if (ret == 0):
         moulitek_script_trace += "[BUILD SUCCESS]\n"
     else:
         exit(0)
-
 
 def success(name):
     global moulitek_script_trace
@@ -39,9 +50,12 @@ def success(name):
     moulitek_script_trace += "_____________________________________\n\n"
 
 
-def category(name, description):
+def category(name, description, info):
     global moulitek_script_trace
-    moulitek_script_trace += "[##] " + name + " [/##]\n\n"
+    if info:
+        moulitek_script_trace += "[i] " + name + " [/i]\n\n"
+    else:
+        moulitek_script_trace += "[##] " + name + " [/##]\n\n"
     if (description != None):
         moulitek_script_trace += "[desc]\n" + description + "\n[/desc]\n"
     moulitek_script_trace += "_____________________________________\n\n"
@@ -76,7 +90,7 @@ def error(name, flag, description, expected, got):
 
 def gen_trace():
     for cat in moulitek_all_categories:
-        category(cat.name, cat.desc)
+        category(cat.name, cat.desc, cat.info)
         for seq in cat.sequences:
             sequence(seq.name, seq.desc)
             for test in seq.tests:
