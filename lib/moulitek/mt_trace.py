@@ -1,4 +1,5 @@
 from mt_print import *
+import requests
 
 moulitek_script_trace = ""
 

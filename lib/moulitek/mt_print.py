@@ -6,27 +6,78 @@ NEVER_RUN = 5
 
 moulitek_all_categories = []
 
+
+class Category:
+    def __init__(self, name, desc=None):
+        """Init a category
+
+        `name` The name of the category
+
+        `desc` (optional) A description of the category
+        """
+        self.name = name
+        self.desc = desc
+        self.sequences = []
+        moulitek_all_categories.append(self)
+
+    def add_sequence(self, name, desc=None):
+        """Add sequence to category
+
+        `name` The name of the sequence
+
+        `desc` (optional) A description of the sequence
+        """
+        sequence = Sequence(self, name, desc)
+        self.sequences.append(sequence)
+        return sequence
+
+
 class Sequence:
-    def __init__(self, category, name, desc = None):
+    def __init__(self, category: Category, name: str, desc : str = None):
         self.name = name
         self.desc = desc
         self.category = category
         self.tests = []
 
-    def test_exist(self, name):
+    def test_exist(self, name: str):
+        """Check if test exists
+
+        `name` The name of the test
+        """
         for i, test in enumerate(self.tests):
             if test["name"] == name:
                 return i
         return -1
 
-    def add_test(self, name, desc = None):
+    def add_test(self, name: str, desc: str = None):
+        """Add a test to the Sequence
+
+        `name` The name of the test
+
+        `desc` (optional) A description of the test
+        """
         if self.test_exist(name) != -1:
             return False
-        test = {"name": name, "desc": desc, "passed": False, "reason": NEVER_RUN, "expected": None, "got": None}
+        test = {"name": name, "desc": desc, "passed": False,
+                "reason": NEVER_RUN, "expected": None, "got": None}
         self.tests.append(test)
         return True
 
-    def set_status(self, name, passed = True, reason = 0, expected = None, got = None):
+    def set_status(self, name, passed: bool = True, reason: int = 0, expected: str = None, got: str = None):
+        """Set status of a test
+
+        `name` The name of the test
+
+        `passed` Test status
+
+        - If passed is False :
+
+            `reason` SEGFAULT | BADOUTPUT | RETVALUE | TIMEOUT
+
+            `expected`: Expected result
+
+            `got`: Expected result
+        """
         existing_test = self.test_exist(name)
         if existing_test == -1:
             return False
@@ -37,15 +88,3 @@ class Sequence:
         self.tests[existing_test]["expected"] = expected
         self.tests[existing_test]["got"] = got
         return True
-
-class Category:
-    def __init__(self, name, desc = None):
-        self.name = name
-        self.desc = desc
-        self.sequences = []
-        moulitek_all_categories.append(self)
-
-    def add_sequence(self, name, desc = None):
-        sequence = Sequence(self, name, desc)
-        self.sequences.append(sequence)
-        return sequence
