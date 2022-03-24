@@ -6,7 +6,6 @@ NEVER_RUN = 5
 
 moulitek_all_categories = []
 
-
 class Category:
     def __init__(self, name, desc=None):
         """Init a category

@@ -1,6 +1,34 @@
 from moulitek.mt_print import *
+import subprocess
+import glob
 
 moulitek_script_trace = ""
+
+def init_moulitek():
+    """Initialize moulitek for testing
+    """
+    global moulitek_script_trace
+    if not "Makefile" in glob.glob("*"):
+        moulitek_script_trace += "[BUILD SUCCESS]\n"
+        return
+    ret = subprocess.call(
+        "timeout 15s make re 1> /dev/null 2> /dev/null", shell=True)
+    if (ret == 0):
+        moulitek_script_trace += "[BUILD SUCCESS]\n"
+    else:
+        exit(0)
+    subprocess.call(
+        "timeout 15s make tests_run 1> /dev/null 2> /dev/null", shell=True)
+    proc = subprocess.Popen("timeout 15s gcovr --exclude=tests", shell=True,
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    proc.wait()
+    if proc.returncode == 0:
+        coverage, _ = proc.communicate()
+        moulitek_script_trace += "[covr]\n%s[/covr]\n" % coverage.decode()
+        proc = subprocess.Popen("timeout 15s gcovr --exclude=tests -b",
+                                shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+        branches, _ = proc.communicate()
+        moulitek_script_trace += "[branch]\n%s[/branch]\n" % branches.decode()
 
 def success(name):
     global moulitek_script_trace
