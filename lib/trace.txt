@@ -1,1 +1,45 @@
-{"build": true, "coverage": null, "branches": null, "tests": [{"name": "Basic tests", "description": "Simple tests to begin", "info": false, "sequences": [{"name": "Loop on basic files", "description": null, "passed": false, "tests": [{"name": "First test", "passed": true}, {"name": "Second test", "description": null, "passed": false, "reason": "SEGFAULT", "expected": "0", "got": "139"}, {"name": "Third test", "description": null, "passed": false, "reason": "BADOUTPUT", "expected": "OK", "got": "KO"}, {"name": "Last test", "passed": true}]}]}]}
+{
+    "build": true,
+    "coverage": null,
+    "branches": null,
+    "tests": [
+        {
+            "name": "Basic tests",
+            "description": "Simple tests to begin",
+            "info": false,
+            "sequences": [
+                {
+                    "name": "Loop on basic files",
+                    "description": null,
+                    "passed": false,
+                    "tests": [
+                        {
+                            "name": "First test",
+                            "passed": true
+                        },
+                        {
+                            "name": "Second test",
+                            "description": null,
+                            "passed": false,
+                            "reason": "SEGFAULT",
+                            "expected": "0",
+                            "got": "139"
+                        },
+                        {
+                            "name": "Third test",
+                            "description": null,
+                            "passed": false,
+                            "reason": "BADOUTPUT",
+                            "expected": "OK",
+                            "got": "KO"
+                        },
+                        {
+                            "name": "Last test",
+                            "passed": true
+                        }
+                    ]
+                }
+            ]
+        }
+    ]
+}
