@@ -1,6 +1,7 @@
 #!/bin/sh
 echo "=> Browse to find old versions..."
-FILE=/usr/lib/python3.10/site-packages/moulitek
+PYPATH=`python -c "import sys; print('\n'.join(sys.path))" | sed -n '3p'`
+FILE=$PYPATH/moulitek
 if [ -d $FILE ]
 then
     echo "=> Erasing old repository..."
@@ -23,7 +24,7 @@ echo "=> Creating repository..."
 tput sgr0
 
 git clone git@github.com:vavarier/python_lib.git moulitek_lib
-sudo mv moulitek_lib/lib/moulitek /usr/lib/python3.10/site-packages
+sudo mv moulitek_lib/lib/moulitek $PYPATH
 rm -rf moulitek_lib
 
 tput setaf 2
