@@ -1,4 +1,5 @@
 #!/bin/sh
+a=0
 echo "=> Browse to find old versions..."
 PYPATH=`python -c "import sys; print('\n'.join(sys.path))" | sed -n '3p'`
 FILE=$PYPATH/moulitek
